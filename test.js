@@ -32,14 +32,20 @@ const possibleCheckouts = {
 };
 
 const testCheckout = num => test(num, (t) => {
-  const ways = getCheckoutWays(num, 0, 3, 5);
+  const ways = getCheckoutWays({ current: num, minScore: 5 });
   t.deepEqual(ways, possibleCheckouts[num]);
 });
 
 Object.keys(possibleCheckouts).forEach(num => testCheckout(num));
 
 test('ways to 32', (t) => {
-  const ways = getCheckoutWays(50, 32, 2, 10, { singles: 1, doubles: 1 });
+  const ways = getCheckoutWays({
+    current: 50,
+    goal: 32,
+    maxLength: 2,
+    minScore: 10,
+    settings: { singles: 1, doubles: 1 },
+  });
   t.deepEqual(ways, [
     ['18'],
   ]);

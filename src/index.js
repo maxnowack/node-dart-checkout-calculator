@@ -24,19 +24,19 @@ const getDifficulty = (value) => {
   return difficulty;
 };
 
-export default function getCheckoutWays(
+export default function getCheckoutWays({
   current,
   goal = 0,
   maxLength = 3,
-  minValue = 0,
+  minScore = 0,
   settings = { doubles: true },
   length = 0,
-) {
+}) {
   const checkoutWays = [];
   if (length >= maxLength) return checkoutWays;
   const testCheckout = what => Object.keys(scores[what]).forEach((name) => {
     const value = scores[what][name];
-    if (value < minValue) return;
+    if (value < minScore) return;
     const newValue = current - value;
 
     if (newValue < goal) return;
@@ -46,11 +46,18 @@ export default function getCheckoutWays(
     }
 
     if (length + 1 >= maxLength) return;
-    getCheckoutWays(newValue, goal, maxLength, minValue, {
-      singles: true,
-      doubles: true,
-      triples: true,
-    }, length + 1).forEach(way => checkoutWays.push(way.concat([name])));
+    getCheckoutWays({
+      current: newValue,
+      goal,
+      maxLength,
+      minScore,
+      settings: {
+        singles: true,
+        doubles: true,
+        triples: true,
+      },
+      length: length + 1,
+    }).forEach(way => checkoutWays.push(way.concat([name])));
   });
   if (settings.triples) testCheckout('triples');
   if (settings.doubles) testCheckout('doubles');
