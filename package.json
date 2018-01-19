@@ -7,6 +7,7 @@
     "prepare": "npm run build",
     "lint": "eslint src",
     "build": "babel src -d dist",
+    "generate": "babel-node generate.js",
     "clean": "rm -rf dist",
     "test": "ava"
   },
@@ -54,7 +55,11 @@
     "eslint": "^4.15.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-babel": "^4.1.2",
-    "eslint-plugin-import": "^2.8.0"
+    "eslint-plugin-import": "^2.8.0",
+    "left-pad": "^1.2.0",
+    "lodash.groupby": "^4.6.0",
+    "p-map": "^1.2.0",
+    "pify": "^3.0.0"
   },
   "dependencies": {
     "array-same": "^1.0.2",
