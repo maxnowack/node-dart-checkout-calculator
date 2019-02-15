@@ -34,9 +34,9 @@ export default function getCheckoutWays({
 }) {
   const checkoutWays = [];
   if (length >= maxLength) return checkoutWays;
-  const testCheckout = what => Object.keys(scores[what]).forEach((name) => {
+  const testCheckout = (what, excludeBelow) => Object.keys(scores[what]).forEach((name) => {
     const value = scores[what][name];
-    if (value < minScore) return;
+    if (value < minScore || value < excludeBelow) return;
     const newValue = current - value;
 
     if (newValue < goal) return;
@@ -53,15 +53,15 @@ export default function getCheckoutWays({
       minScore,
       settings: {
         singles: true,
-        doubles: true,
-        triples: true,
+        doubles: { excludeBelow: 21 },
+        triples: { excludeBelow: 21 },
       },
       length: length + 1,
     }).forEach(way => checkoutWays.push(way.concat([name])));
   });
-  if (settings.triples) testCheckout('triples');
-  if (settings.doubles) testCheckout('doubles');
-  if (settings.singles) testCheckout('singles');
+  if (settings.triples) testCheckout('triples', settings.triples.excludeBelow);
+  if (settings.doubles) testCheckout('doubles', settings.doubles.excludeBelow);
+  if (settings.singles) testCheckout('singles', settings.singles.excludeBelow);
   return checkoutWays
     .sort((a, b) => {
       if (a.length < b.length) return -1;
